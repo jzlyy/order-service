@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service 
+  namespace: backend
+  labels:
+    app: order
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+        - name: order-service
+          image: 
+          ports:
+            - containerPort: 8080
+              name: order-backend
+          resources:
+            requests:
+              cpu: 1024m
+              memory: 800Mi
+            limits:
+              cpu: 2048m
+              memory: 1200Mi
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initalDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThshold: 3
+          readinressProbe:
+            tcpSocket:
+              port: 8080
+            initalDelaySeconds: 15
+            periodSeconds: 10
+            successThshold: 2
+            failureThshold: 3
